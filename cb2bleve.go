@@ -34,18 +34,25 @@ var mappingFile = flag.String("mapping", "", "mapping file")
 var storeType = flag.String("store", bleve.Config.DefaultKVStore, "store type")
 var indexType = flag.String("indexType", bleve.Config.DefaultIndexType, "index type")
 
+var stopAtHighSeqNo = flag.Bool("stopAtHighSeqNo", false, "utilize DCP's seqno-end option")
+
 func main() {
 	flag.Parse()
 
-	// get the end point for this export
-	// highWaterMark, err := HighWaterMark(*cbUrl, *cbPool, *cbBucket)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
 	options := cbdatasource.DefaultBucketDataSourceOptions
 	options.Name = "cb2bleve"
-	//options.SeqEnd = highWaterMark
+
+	if *stopAtHighSeqNo {
+		// get the end point for this export
+		highWaterMark, err := HighWaterMark(*cbUrl, *cbPool, *cbBucket)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		options.SeqEnd = highWaterMark
+	}
+
+	log.Printf("options: %#v", options)
 
 	r, err := NewBleveIndxingDCPReceiver(*indexPath, *storeType, *indexType, *mappingFile)
 	if err != nil {
