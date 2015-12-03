@@ -1,0 +1,12 @@
+#*
+*.out
+*.pprof
+*.sublime-*
+*.tmp
+*~
+.#*
+.project
+.settings
+.DS_Store
+/cb2bleve
+*.bleve
