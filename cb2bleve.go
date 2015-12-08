@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/blevesearch/bleve"
+	_ "github.com/blevesearch/bleve/config"
 	"github.com/couchbase/go-couchbase"
 	"github.com/couchbase/go-couchbase/cbdatasource"
 )
